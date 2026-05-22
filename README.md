@@ -1,4 +1,4 @@
-# Upwind Email Shield 🛡️
+# EmailShield 🛡️
 ### A real-time Gmail Add-on that leverages a multi-layered defense model to analyze opened emails, delivering a maliciousness score and a clear, explainable security verdict.
 
 ## 🧠 Security Logic & Core Features
@@ -12,16 +12,19 @@ Before external APIs are queried, the system checks the sender's address against
 ### 2. Google Safe Browsing Integration
 The system extracts all URLs from the email body and verifies them against Google's global threat database. Any known malicious link results in an immediate **100/100 Threat Score**.
 
-### 3. Domain Maturity (RDAP Protocol)
-Analyzes the sender's domain age to detect freshly registered "look-alike" domains commonly used in phishing campaigns.
+### 3. Domain Maturity (RDAP Protocol) & Subdomain Extraction
+Analyzes the sender's domain age to detect freshly registered "look-alike" domains commonly used in phishing campaigns. The system uses `tldextract` to smartly isolate the root domain, ensuring enterprise subdomains (e.g., `accounts.google.com`) don't break the scan.
 * **Domain < 4 days old:** +90 points (Critical)
 * **Domain < 30 days old:** +50 points (Suspicious)
 * **Established domains:** 0 points
 
-### 4. Heuristic Analysis
+### 4. Authentication Verification (SPF/DKIM) - False Positive Reduction
+To prevent legitimate security alerts from being flagged as malicious, the system parses the hidden `Authentication-Results` headers. If an email passes standard cryptographic authentication (SPF/DKIM) and comes from an established domain, its final risk score is **reduced by 50%**.
+
+### 5. Heuristic Analysis
 Scans the subject and body for aggressive social engineering keywords (e.g., "Urgent", "Action Required") and suspicious call-to-action phrases.
 
-### 5. Scan Data & Audit Logging
+### 6. Scan Data & Audit Logging
 Every evaluated email is automatically logged into the SQLite database. The system records the sender's details, the final threat score, the verdict, and the specific risk factors identified, providing a comprehensive audit trail for security review.
 
 ---
@@ -38,18 +41,20 @@ Every evaluated email is automatically logged into the SQLite database. The syst
 To demonstrate the system's "High Risk" UI and response logic:
 1. Send an email to the connected Gmail account with the word **"DEMO"** in the subject line.
 2. Open the email and trigger the Add-on.
-3. The backend will intercept the keyword, simulate a 0-day-old malicious domain, and return a **90/100 High Risk** verdict with red visual indicators and a direct link to Upwind's security resources.
+3. The backend will intercept the keyword, simulate a 0-day-old malicious domain, and return a **90/100 High Risk** verdict with red visual indicators and a direct link to this GitHub repository.
 
 ---
 
-## 💡 Engineering Note: RDAP vs. WHOIS and BlackList
+## 💡 Engineering Notes
+* **The Subdomain Problem:** One of the core challenges addressed was domain age verification for massive organizations. Emails sent from subdomains naturally fail standard RDAP checks because registries only track root domains. MailShield implements an extraction layer to cleanly parse the root domain before querying, preventing False Positives on legitimate enterprise emails.
 * **RDAP over WHOIS:** I migrated from traditional WHOIS to RDAP for domain checks. RDAP returns clean JSON and is much more stable on cloud platforms (like Render), avoiding the rate limits and connection drops common with legacy WHOIS servers.
-* **Demo Environment (Blacklist):** The local SQLite blacklist is kept empty for this demo. Normally, if a sender is blacklisted, the scan stops immediately and returns a 100 score. Keeping it empty allows you to see the rest of the analysis engine (RDAP, Google APIs, Heuristics) at work.
+* **Demo Environment (Blacklist):** The local SQLite blacklist is kept empty for this demo. Normally, if a sender is blacklisted, the scan stops immediately and returns a 100 score. Keeping it empty allows you to see the rest of the analysis engine at work.
 
 ## 🛠️ Tech Stack
 * **Backend:** Python 3.9+, FastAPI (Deployed on Render)
 * **Database:** SQLite (Lightweight, local database for Blacklist and Scan Logging)
 * **Frontend:** Google Apps Script (Gmail Add-on SDK)
+* **Libraries:** `tldextract`, `requests`
 * **External APIs:** RDAP Protocol, Google Safe Browsing API
 
 ## ⚙️ Installation & Setup
