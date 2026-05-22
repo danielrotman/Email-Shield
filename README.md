@@ -104,10 +104,10 @@ Here are a few examples of the Add-on in action, displaying different threat lev
 
 [<img width="1277" height="553" alt="Screenshot 2026-05-22 184951" src="https://github.com/user-attachments/assets/fa7c44d2-d732-41c3-97cc-b0c35f3ce5ca" />]
 
-**🟡 Suspicious Email** - *60/100 Threat Score*
+**🟡 Suspicious Email** - *40/100 Threat Score*
 
 [<img width="1261" height="587" alt="Screenshot 2026-05-22 184728" src="https://github.com/user-attachments/assets/c59b2159-38e6-4597-a0e4-dcae9e34ae81" />]
 
-**🟢 Safe Email** - *20/100 Threat Score*
+**🟢 Safe Email** - *0/100 Threat Score*
 
 [<img width="1277" height="591" alt="Screenshot 2026-05-22 184907" src="https://github.com/user-attachments/assets/61f6570a-43d4-4804-96a0-473768685713" />]
