@@ -102,13 +102,12 @@ Here are a few examples of the Add-on in action, displaying different threat lev
 
 **🔴 High Risk (Simulated Demo)** - *90/100 Threat Score*
 
-[<img width="1271" height="506" alt="WhatsApp Image 2026-05-08 at 20 45 00" src="https://github.com/user-attachments/assets/4b8a0a98-21fd-4262-a6f7-2d7b0516392a" />]
+[<img width="1277" height="553" alt="Screenshot 2026-05-22 184951" src="https://github.com/user-attachments/assets/fa7c44d2-d732-41c3-97cc-b0c35f3ce5ca" />]
 
 **🟡 Suspicious Email** - *60/100 Threat Score*
 
-[<img width="995" height="493" alt="image" src="https://github.com/user-attachments/assets/e79f29a8-238e-4944-afaa-cd0a192f7624" />
-]
+[<img width="1261" height="587" alt="Screenshot 2026-05-22 184728" src="https://github.com/user-attachments/assets/c59b2159-38e6-4597-a0e4-dcae9e34ae81" />]
 
 **🟢 Safe Email** - *20/100 Threat Score*
 
-[<img width="995" height="455" alt="image" src="https://github.com/user-attachments/assets/8b8d5d60-9258-4e14-b357-8e00d609f6b6" />]
+[<img width="1277" height="591" alt="Screenshot 2026-05-22 184907" src="https://github.com/user-attachments/assets/61f6570a-43d4-4804-96a0-473768685713" />]
