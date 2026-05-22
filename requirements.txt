@@ -3,3 +3,4 @@ uvicorn
 requests
 python-whois
 python-dotenv
+tldextract

@@ -20,6 +20,13 @@ def init_db():
             timestamp DATETIME
         )
     ''')
+    cursor.execute('''
+            CREATE TABLE IF NOT EXISTS domain_cache (
+                domain TEXT UNIQUE,
+                age_days INTEGER,
+                timestamp DATETIME
+            )
+        ''')
     conn.commit()
     conn.close()
 
@@ -50,7 +57,6 @@ def log_scan(sender, subject, score, verdict, reasons):
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # הפיכת רשימת הסיבות לטקסט מופרד בפסיקים
     reasons_str = ", ".join(reasons) if reasons else "None"
 
     cursor.execute('''
@@ -60,3 +66,26 @@ def log_scan(sender, subject, score, verdict, reasons):
 
     conn.commit()
     conn.close()
+
+def get_cached_domain_age(domain):
+        conn = sqlite3.connect('security.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT age_days FROM domain_cache WHERE domain = ?', (domain,))
+        result = cursor.fetchone()
+        conn.close()
+        return result[0] if result else None
+
+def set_cached_domain_age(domain, age_days):
+        conn = sqlite3.connect('security.db')
+        cursor = conn.cursor()
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        try:
+            cursor.execute('''
+                INSERT OR REPLACE INTO domain_cache (domain, age_days, timestamp)
+                VALUES (?, ?, ?)
+            ''', (domain, age_days, timestamp))
+            conn.commit()
+        except Exception as e:
+            print(f"Error caching domain: {e}")
+        finally:
+            conn.close()
